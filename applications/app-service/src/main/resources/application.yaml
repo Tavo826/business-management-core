@@ -1,14 +1,10 @@
 server:
-  port: 8080
+  port: "${SERVER_PORT}"
 spring:
   application:
     name: "BusinessManagerCore"
   devtools:
     add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: "/h2"
   profiles:
     include: null
 management:
@@ -22,3 +18,26 @@ management:
         enabled: true
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
+security:
+  webhook-token: "${WEBHOOK_TOKEN}"
+adapters:
+  r2dbc:
+    host: "${CORE_DB_HOST}"
+    port: "${CORE_DB_PORT}"
+    database: "${CORE_DB_NAME}"
+    schema: "${CORE_DB_SCHEMA}"
+    username: "${CORE_DB_USERNAME}"
+    password: "${CORE_DB_PASSWORD}"
+    pool:
+      initial-size: "${CORE_DB_POOL_INITIAL_SIZE}"
+      max-size: "${CORE_DB_POOL_MAX_SIZE}"
+      max-idle-time: "${CORE_DB_POOL_MAX_IDLE_TIME}"
+logging:
+  level:
+    io:
+      r2dbc:
+        postgresql: "${LOGGING_LEVEL}"
+    org:
+      springframework:
+        data:
+          r2dbc: "${LOGGING_LEVEL}"

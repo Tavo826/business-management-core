@@ -1,5 +1,6 @@
 package co.com.manager.api;
 
+import co.com.manager.api.handler.MessageHandler;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@ContextConfiguration(classes = {RouterRest.class, Handler.class})
+@ContextConfiguration(classes = {RouterRest.class, MessageHandler.class})
 @WebFluxTest
 class RouterRestTest {
 
