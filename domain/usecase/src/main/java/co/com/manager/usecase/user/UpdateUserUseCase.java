@@ -19,11 +19,21 @@ public class UpdateUserUseCase {
                     actualUser.setName(user.getName());
                     actualUser.setSurname(user.getSurname());
                     actualUser.setEmail(user.getEmail());
-                    actualUser.setPassword(user.getPassword());
                     actualUser.setBirthdate(user.getBirthdate());
 
                     return actualUser;
                 })
                 .flatMap(repository::update);
+    }
+
+    public Mono<User> updatePassword(String id, String password) {
+        return repository.findUserById(id)
+                .switchIfEmpty(Mono.error(new UserNotFoundException(id)))
+                .map(actualUser -> {
+                    actualUser.setPassword(password);
+
+                    return actualUser;
+                })
+                .flatMap(repository::updatePassword);
     }
 }

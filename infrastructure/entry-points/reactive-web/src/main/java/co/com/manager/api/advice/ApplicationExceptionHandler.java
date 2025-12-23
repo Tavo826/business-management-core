@@ -1,5 +1,6 @@
 package co.com.manager.api.advice;
 
+import co.com.manager.model.exceptions.BusinessNotFoundException;
 import co.com.manager.model.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -14,6 +15,14 @@ public class ApplicationExceptionHandler {
 
         var problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problem.setTitle("User Not Found");
+        return problem;
+    }
+
+    @ExceptionHandler(BusinessNotFoundException.class)
+    public ProblemDetail handleBusinessNotFoundException(BusinessNotFoundException ex) {
+
+        var problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problem.setTitle("Business Not Found");
         return problem;
     }
 
