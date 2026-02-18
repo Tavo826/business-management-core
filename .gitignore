@@ -337,3 +337,6 @@ gradle-app.setting
 # -----
 *.hprof
 build-cache
+
+# Windows NUL device artifact (created when gradlew.bat runs from Git Bash)
+nul

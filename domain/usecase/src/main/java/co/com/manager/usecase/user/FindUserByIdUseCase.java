@@ -14,6 +14,6 @@ public class FindUserByIdUseCase {
     public Mono<User> findById(String id) {
 
         return repository.findUserById(id)
-                .switchIfEmpty(Mono.error(new UserNotFoundException(id)));
+                .switchIfEmpty(Mono.error(new UserNotFoundException("[id: " + id + "]")));
     }
 }

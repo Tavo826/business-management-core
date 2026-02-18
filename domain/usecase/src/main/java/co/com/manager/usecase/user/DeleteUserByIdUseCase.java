@@ -8,8 +8,8 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class DeleteUserByIdUseCase {
 
-    private UserRepository repository;
-    private BusinessRepository businessRepository;
+    private final UserRepository repository;
+    private final BusinessRepository businessRepository;
 
     public Mono<Void> delete(String id) {
 

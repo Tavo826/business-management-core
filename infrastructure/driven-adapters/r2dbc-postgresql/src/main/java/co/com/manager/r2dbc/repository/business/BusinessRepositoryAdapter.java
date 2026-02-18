@@ -34,7 +34,8 @@ public class BusinessRepositoryAdapter extends ReactiveAdapterOperations<
     @Override
     public Flux<Business> findAllBusinessByUserId(String userId) {
 
-        return repository.findAllByOwnerDocumentId(userId);
+        return repository.findAllByOwnerDocumentId(userId)
+                .map(businessData -> mapper.map(businessData, Business.class));
     }
 
     @Override

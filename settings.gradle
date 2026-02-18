@@ -26,3 +26,11 @@ include ':token-valitador'
 project(':token-valitador').projectDir = file('./infrastructure/helpers/token-valitador')
 include ':r2dbc-postgresql'
 project(':r2dbc-postgresql').projectDir = file('./infrastructure/driven-adapters/r2dbc-postgresql')
+include ':jwt-adapter'
+project(':jwt-adapter').projectDir = file('./infrastructure/helpers/jwt-adapter')
+include ':password-encoder'
+project(':password-encoder').projectDir = file('./infrastructure/helpers/password-encoder')
+include ':rest-consumer'
+project(':rest-consumer').projectDir = file('./infrastructure/driven-adapters/rest-consumer')
+include ':model-adapter'
+project(':model-adapter').projectDir = file('./infrastructure/driven-adapters/model-adapter')

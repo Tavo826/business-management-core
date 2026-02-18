@@ -1,6 +1,13 @@
 package co.com.manager.config;
 
+import co.com.manager.model.ai.ModelPort;
+import co.com.manager.model.business.BusinessRepository;
+import co.com.manager.model.encoder.EncoderPort;
+import co.com.manager.model.token.AuthenticationPort;
+import co.com.manager.model.token.TokenValidator;
+import co.com.manager.model.user.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,13 +24,13 @@ class UseCasesConfigTest {
 
             boolean useCaseBeanFound = false;
             for (String beanName : beanNames) {
-                if (beanName.endsWith("UseCase")) {
+                if (beanName.endsWith("UseCase") || beanName.endsWith("Handler")) {
                     useCaseBeanFound = true;
                     break;
                 }
             }
 
-            assertTrue(useCaseBeanFound, "No beans ending with 'Use Case' were found");
+            assertTrue(useCaseBeanFound, "No beans ending with 'UseCase' or 'Handler' were found");
         }
     }
 
@@ -32,14 +39,33 @@ class UseCasesConfigTest {
     static class TestConfig {
 
         @Bean
-        public MyUseCase myUseCase() {
-            return new MyUseCase();
+        public UserRepository userRepository() {
+            return Mockito.mock(UserRepository.class);
         }
-    }
 
-    static class MyUseCase {
-        public String execute() {
-            return "MyUseCase Test";
+        @Bean
+        public BusinessRepository businessRepository() {
+            return Mockito.mock(BusinessRepository.class);
+        }
+
+        @Bean
+        public EncoderPort encoderPort() {
+            return Mockito.mock(EncoderPort.class);
+        }
+
+        @Bean
+        public AuthenticationPort authenticationPort() {
+            return Mockito.mock(AuthenticationPort.class);
+        }
+
+        @Bean
+        public ModelPort modelPort() {
+            return Mockito.mock(ModelPort.class);
+        }
+
+        @Bean
+        public TokenValidator tokenValidator() {
+            return Mockito.mock(TokenValidator.class);
         }
     }
 }

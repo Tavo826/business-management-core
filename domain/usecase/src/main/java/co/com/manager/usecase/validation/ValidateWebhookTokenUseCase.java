@@ -11,10 +11,10 @@ public class ValidateWebhookTokenUseCase {
 
     private final TokenValidator tokenValidator;
 
-    public Mono<String> verifyToken(Optional<String> challenge, Optional<String> token) {
+    public Mono<String> verifyToken(String challenge, String token) {
 
-        if (tokenValidator.validate(token.get())) {
-            return Mono.just(challenge.orElse(""));
+        if (tokenValidator.validate(token)) {
+            return Mono.just(challenge);
         }
 
         return Mono.empty();

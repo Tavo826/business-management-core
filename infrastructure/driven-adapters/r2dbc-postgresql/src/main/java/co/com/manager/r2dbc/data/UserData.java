@@ -10,6 +10,8 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDateTime;
+
 @Table("users")
 @Data
 @NoArgsConstructor
@@ -25,6 +27,8 @@ public class UserData implements Persistable<String> {
     private String email;
     private String password;
     private String birthdate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @Transient
     @Builder.Default

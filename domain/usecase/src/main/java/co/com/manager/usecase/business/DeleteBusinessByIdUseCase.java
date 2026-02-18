@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class DeleteBusinessByIdUseCase {
 
-    private BusinessRepository repository;
+    private final BusinessRepository repository;
 
     public Mono<Void> delete(String id) {
 

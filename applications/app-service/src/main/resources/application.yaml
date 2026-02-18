@@ -16,9 +16,15 @@ management:
     health:
       probes:
         enabled: true
+  health:
+    circuitbreakers:
+      enabled: true
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8080"
 security:
+  jwt:
+    secret: "${JWT_SECRET}"
+    expiration: "${JWT_EXPIRATION}"
   webhook-token: "${WEBHOOK_TOKEN}"
 adapters:
   r2dbc:
@@ -41,3 +47,32 @@ logging:
       springframework:
         data:
           r2dbc: "${LOGGING_LEVEL}"
+adapter:
+  restconsumer:
+    timeout: 5000
+    url: "http://localhost:8080"
+  gemini:
+    api-key: "${GEMINI_API_KEY}"
+    model-name: "${GEMINI_MODEL:gemini-2.0-flash}"
+    temperature: "${GEMINI_TEMPERATURE:0.7}"
+resilience4j:
+  circuitbreaker:
+    instances:
+      testGet:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: "2s"
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: "10s"
+      testPost:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: "2s"
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: "10s"
