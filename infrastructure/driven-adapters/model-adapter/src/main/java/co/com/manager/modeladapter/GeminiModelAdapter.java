@@ -1,6 +1,6 @@
 package co.com.manager.modeladapter;
 
-import co.com.manager.model.ai.ModelPort;
+import co.com.manager.model.message.webhook.ModelPort;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.ChatModel;

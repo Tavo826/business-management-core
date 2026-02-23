@@ -1,7 +1,7 @@
 package co.com.manager.consumer.message;
 
-import lombok.Builder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ObjectRequest {
+public class MessageDto {
 
-    private String val1;
-    private String val2;
-
+    private String id;
 }

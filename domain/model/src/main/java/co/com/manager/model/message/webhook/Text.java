@@ -1,4 +1,4 @@
-package co.com.manager.model.message;
+package co.com.manager.model.message.webhook;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Change {
+public class Text {
 
-    private Value value;
-    private String field;
+    private boolean previewUrl;
+    private String body;
 }

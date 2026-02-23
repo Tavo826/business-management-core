@@ -1,6 +1,7 @@
 package co.com.manager.config;
 
-import co.com.manager.model.ai.ModelPort;
+import co.com.manager.model.message.user.MessageGateway;
+import co.com.manager.model.message.webhook.ModelPort;
 import co.com.manager.model.business.BusinessRepository;
 import co.com.manager.model.encoder.EncoderPort;
 import co.com.manager.model.token.AuthenticationPort;
@@ -61,6 +62,11 @@ class UseCasesConfigTest {
         @Bean
         public ModelPort modelPort() {
             return Mockito.mock(ModelPort.class);
+        }
+
+        @Bean
+        public MessageGateway messageGateway() {
+            return Mockito.mock(MessageGateway.class);
         }
 
         @Bean

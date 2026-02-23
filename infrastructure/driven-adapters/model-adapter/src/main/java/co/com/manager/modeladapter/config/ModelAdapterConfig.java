@@ -11,9 +11,9 @@ public class ModelAdapterConfig {
 
     @Bean
     public ChatModel chatModel(
-            @Value("${adapter.gemini.api-key}") String apiKey,
-            @Value("${adapter.gemini.model-name:gemini-2.0-flash}") String modelName,
-            @Value("${adapter.gemini.temperature:0.7}") double temperature) {
+            @Value("${adapters.gemini.api-key}") String apiKey,
+            @Value("${adapters.gemini.model-name:gemini-2.0-flash}") String modelName,
+            @Value("${adapters.gemini.temperature:0.7}") double temperature) {
         return GoogleAiGeminiChatModel.builder()
                 .apiKey(apiKey)
                 .modelName(modelName)

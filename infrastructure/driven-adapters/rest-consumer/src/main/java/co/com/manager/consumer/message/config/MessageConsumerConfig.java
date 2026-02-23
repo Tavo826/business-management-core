@@ -18,28 +18,29 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class MessageConsumerConfig {
 
     private final String url;
-
     private final int timeout;
+    private final String accessToken;
 
-    public MessageConsumerConfig(@Value("${adapter.restconsumer.url}") String url,
-                                 @Value("${adapter.restconsumer.timeout}") int timeout) {
+    public MessageConsumerConfig(@Value("${adapters.restmessageconsumer.url}") String url,
+                                 @Value("${adapters.restmessageconsumer.timeout}") int timeout,
+                                 @Value("${adapters.restmessageconsumer.token}") String accessToken) {
         this.url = url;
         this.timeout = timeout;
+        this.accessToken = accessToken;
     }
 
-    @Bean
-    public WebClient getWebClient(WebClient.Builder builder) {
+    @Bean(name = "messageWebClient")
+    public WebClient getMessageWebClient(WebClient.Builder builder) {
         return builder
-            .baseUrl(url)
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-            .clientConnector(getClientHttpConnector())
-            .build();
+                .baseUrl(url)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .clientConnector(getMessageClientHttpConnector())
+                .build();
     }
 
-    private ClientHttpConnector getClientHttpConnector() {
-        /*
-        IF YO REQUIRE APPEND SSL CERTIFICATE SELF SIGNED: this should be in the default cacerts trustore
-        */
+    private ClientHttpConnector getMessageClientHttpConnector() {
+
         return new ReactorClientHttpConnector(HttpClient.create()
                 .compress(true)
                 .keepAlive(true)

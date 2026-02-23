@@ -1,7 +1,7 @@
 package co.com.manager.api.handler;
 
-import co.com.manager.model.message.ClientMessage;
-import co.com.manager.model.message.Message;
+import co.com.manager.api.dtos.message.ClientMessageDto;
+import co.com.manager.api.dtos.message.ClientMessageMapper;
 import co.com.manager.usecase.message.UserMessageHandler;
 import co.com.manager.usecase.validation.ValidateWebhookTokenUseCase;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,7 @@ public class MessageHandler {
 
     private final ValidateWebhookTokenUseCase validateWebhookTokenUseCase;
     private final UserMessageHandler userMessageHandler;
+    private final ClientMessageMapper clientMessageMapper;
 
     public Mono<ServerResponse> apiStatus(ServerRequest serverRequest) {
         return ServerResponse.ok().bodyValue("OK");
@@ -30,13 +31,15 @@ public class MessageHandler {
         String challengeValue = challenge.orElse("");
         String verifyTokenValue = verifyToken.orElse("");
 
-        return ServerResponse.ok()
-                .bodyValue(validateWebhookTokenUseCase.verifyToken(challengeValue, verifyTokenValue));
+        return validateWebhookTokenUseCase.verifyToken(challengeValue, verifyTokenValue)
+                .flatMap(value -> ServerResponse.ok().bodyValue(value))
+                .switchIfEmpty(ServerResponse.badRequest().build());
     }
 
     public Mono<ServerResponse> handleUserMessage(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(ClientMessage.class)
+        return serverRequest.bodyToMono(ClientMessageDto.class)
+                .map(clientMessageMapper::toDomain)
                 .flatMap(userMessageHandler::handleMessage)
-                .flatMap(response -> ServerResponse.ok().bodyValue(response));
+                .flatMap(userMessage -> ServerResponse.ok().bodyValue(userMessage));
     }
 }

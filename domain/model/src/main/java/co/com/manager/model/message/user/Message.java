@@ -1,4 +1,4 @@
-package co.com.manager.model.message;
+package co.com.manager.model.message.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Metadata {
+public class Message {
 
-    private String displayPhoneNumber;
-    private String phoneNumberId;
+    private String id;
 }

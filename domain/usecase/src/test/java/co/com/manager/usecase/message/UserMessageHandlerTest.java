@@ -1,7 +1,7 @@
 package co.com.manager.usecase.message;
 
-import co.com.manager.model.ai.ModelPort;
-import co.com.manager.model.message.*;
+import co.com.manager.model.message.webhook.ModelPort;
+import co.com.manager.model.message.webhook.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

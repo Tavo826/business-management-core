@@ -1,18 +1,16 @@
-package co.com.manager.model.message;
+package co.com.manager.model.message.webhook;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientMessage {
+public class Change {
 
-    public String object;
-    public List<Entry> entry;
+    private Value value;
+    private String field;
 }

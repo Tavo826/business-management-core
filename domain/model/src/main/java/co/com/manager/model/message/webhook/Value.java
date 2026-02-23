@@ -1,4 +1,4 @@
-package co.com.manager.model.message;
+package co.com.manager.model.message.webhook;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package co.com.manager.model.ai;
+package co.com.manager.model.message.webhook;
 
 import reactor.core.publisher.Mono;
 

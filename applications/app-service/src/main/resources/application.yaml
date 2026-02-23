@@ -38,6 +38,14 @@ adapters:
       initial-size: "${CORE_DB_POOL_INITIAL_SIZE}"
       max-size: "${CORE_DB_POOL_MAX_SIZE}"
       max-idle-time: "${CORE_DB_POOL_MAX_IDLE_TIME}"
+  restmessageconsumer:
+    timeout: 5000
+    url: "${URI_USER_MESSAGE}"
+    token: "${REST_USER_TOKEN}"
+  gemini:
+    api-key: "${GEMINI_API_KEY}"
+    model-name: "${GEMINI_MODEL:gemini-2.0-flash}"
+    temperature: "${GEMINI_TEMPERATURE:0.7}"
 logging:
   level:
     io:
@@ -47,14 +55,7 @@ logging:
       springframework:
         data:
           r2dbc: "${LOGGING_LEVEL}"
-adapter:
-  restconsumer:
-    timeout: 5000
-    url: "http://localhost:8080"
-  gemini:
-    api-key: "${GEMINI_API_KEY}"
-    model-name: "${GEMINI_MODEL:gemini-2.0-flash}"
-    temperature: "${GEMINI_TEMPERATURE:0.7}"
+
 resilience4j:
   circuitbreaker:
     instances:

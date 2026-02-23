@@ -1,4 +1,4 @@
-package co.com.manager.model.message;
+package co.com.manager.model.message.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Text {
+public class Contact {
 
-    private boolean previewUrl;
-    private String body;
+    private String input;
+    private String waId;
 }
