@@ -1,0 +1,100 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${CORE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${CORE_DB_PASSWORD}
+      POSTGRES_DB: ${CORE_DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${CORE_DB_USERNAME} -d ${CORE_DB_NAME}"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 20s
+    networks:
+      - webnet
+
+  business-core:
+    build:
+      # El jar debe estar presente en build/libs antes de ejecutar docker-compose build
+      # Ejecuta: ./gradlew build -x test
+      context: ./applications/app-service/build/libs
+      dockerfile: ../../../deployment/Dockerfile
+    container_name: business-core-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    volumes:
+      - ./infrastructure/driven-adapters/model-adapter/src/main/resources/prompts/system-prompt.txt:/app/prompt.txt:ro
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      # Database
+      CORE_DB_HOST: postgres
+      CORE_DB_PORT: 5432
+      CORE_DB_NAME: ${CORE_DB_NAME}
+      CORE_DB_SCHEMA: ${CORE_DB_SCHEMA}
+      CORE_DB_USERNAME: ${CORE_DB_USERNAME}
+      CORE_DB_PASSWORD: ${CORE_DB_PASSWORD}
+      CORE_DB_POOL_INITIAL_SIZE: ${CORE_DB_POOL_INITIAL_SIZE:-2}
+      CORE_DB_POOL_MAX_SIZE: ${CORE_DB_POOL_MAX_SIZE:-10}
+      CORE_DB_POOL_MAX_IDLE_TIME: ${CORE_DB_POOL_MAX_IDLE_TIME:-30m}
+      # Security
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      WEBHOOK_TOKEN: ${WEBHOOK_TOKEN}
+      # Integrations
+      URI_USER_MESSAGE: ${URI_USER_MESSAGE}
+      REST_USER_TOKEN: ${REST_USER_TOKEN}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      GEMINI_TEMPERATURE: ${GEMINI_TEMPERATURE:-0.7}
+      # Logging
+      LOGGING_LEVEL: ${LOGGING_LEVEL:-INFO}
+    networks:
+      - webnet
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    depends_on:
+      - business-core
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    networks:
+      - webnet
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    entrypoint: >
+      sh -c "trap exit TERM; while :; do
+        certbot renew --webroot -w /var/www/certbot --quiet;
+        sleep 12h & wait $${!};
+      done"
+
+volumes:
+  postgres_data:
+
+networks:
+  webnet:
+    driver: bridge

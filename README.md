@@ -1,47 +1,62 @@
-# Proyecto Base Implementando Clean Architecture
+# Business Manager Core
 
-## Antes de Iniciar
+## Propósito
 
-Empezaremos por explicar los diferentes componentes del proyectos y partiremos de los componentes externos, continuando con los componentes core de negocio (dominio) y por último el inicio y configuración de la aplicación.
+## Instrucciones de despliegue
 
-Lee el artículo [Clean Architecture — Aislando los detalles](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
+### Ambiente AWS
 
-# Arquitectura
+* Nombre instancia: business-manager-core
 
-![Clean Architecture](https://miro.medium.com/max/1400/1*ZdlHz8B0-qu9Y-QO3AXR_w.png)
+#### Deploy config
 
-## Domain
+sudo yum update -y
+sudo dnf install
+sudo yum install docker git -y
+sudo systemctl start docker
+sudo systemctl enable docker
 
-Es el módulo más interno de la arquitectura, pertenece a la capa del dominio y encapsula la lógica y reglas del negocio mediante modelos y entidades del dominio.
+DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)
+sudo mkdir -p /usr/local/docker/cli-plugins
+sudo curl -SL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-compose
+sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
-## Usecases
+exit
 
-Este módulo gradle perteneciente a la capa del dominio, implementa los casos de uso del sistema, define lógica de aplicación y reacciona a las invocaciones desde el módulo de entry points, orquestando los flujos hacia el módulo de entities.
+sudo dnf install -y java-17-amazon-coretto-devel
 
-## Infrastructure
+java -version
 
-### Helpers
+git clone https://github.com/Tavo826/business-management-communication
 
-En el apartado de helpers tendremos utilidades generales para los Driven Adapters y Entry Points.
+chmod +x gradlew
+./gradlew build -x test
 
-Estas utilidades no están arraigadas a objetos concretos, se realiza el uso de generics para modelar comportamientos
-genéricos de los diferentes objetos de persistencia que puedan existir, este tipo de implementaciones se realizan
-basadas en el patrón de diseño [Unit of Work y Repository](https://medium.com/@krzychukosobudzki/repository-design-pattern-bc490b256006)
+nano .env
+docker-compose up -d --force-recreate business-core-app
 
-Estas clases no puede existir solas y debe heredarse su compartimiento en los **Driven Adapters**
+sudo docker-compose up -d --build
 
-### Driven Adapters
+mkdir -p nginx/conf.d certbot/www certbot/conf
 
-Los driven adapter representan implementaciones externas a nuestro sistema, como lo son conexiones a servicios rest,
-soap, bases de datos, lectura de archivos planos, y en concreto cualquier origen y fuente de datos con la que debamos
-interactuar.
+nano nginx/conf.d/default.conf
 
-### Entry Points
+´´´
+server {
+    listen 80;
+    server_name customermanagement.top www.customermanagement.top;
 
-Los entry points representan los puntos de entrada de la aplicación o el inicio de los flujos de negocio.
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
 
-## Application
-
-Este módulo es el más externo de la arquitectura, es el encargado de ensamblar los distintos módulos, resolver las dependencias y crear los beans de los casos de use (UseCases) de forma automática, inyectando en éstos instancias concretas de las dependencias declaradas. Además inicia la aplicación (es el único módulo del proyecto donde encontraremos la función “public static void main(String[] args)”.
-
-**Los beans de los casos de uso se disponibilizan automaticamente gracias a un '@ComponentScan' ubicado en esta capa.**
+    location / {
+        proxy_pass http://business-core:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+´´´
