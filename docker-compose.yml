@@ -24,10 +24,8 @@ services:
 
   business-core:
     build:
-      # El jar debe estar presente en build/libs antes de ejecutar docker-compose build
-      # Ejecuta: ./gradlew build -x test
       context: ./applications/app-service/build/libs
-      dockerfile: ../../../deployment/Dockerfile
+      dockerfile: ../../../../deployment/Dockerfile
     container_name: business-core-app
     restart: unless-stopped
     depends_on:

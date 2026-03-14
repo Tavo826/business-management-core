@@ -1,4 +1,4 @@
-package co.com.manager.consumer.message;
+package co.com.manager.consumer.message.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

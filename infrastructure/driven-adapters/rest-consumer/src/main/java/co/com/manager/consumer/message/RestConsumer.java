@@ -1,5 +1,7 @@
 package co.com.manager.consumer.message;
 
+import co.com.manager.consumer.message.dto.MessageRequest;
+import co.com.manager.consumer.message.dto.MessageResponse;
 import co.com.manager.model.exceptions.MessageSendException;
 import co.com.manager.model.message.user.MessageGateway;
 import co.com.manager.model.message.user.UserMessageRequest;

@@ -12,6 +12,9 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class UserMessageHandler {
 
+    private static final String FALLBACK_MESSAGE =
+            "Lo sentimos, el asistente no está disponible en este momento. Alguien se comunicará contigo en breve.";
+
     private final ModelPort modelPort;
     private final MessageGateway messageGateway;
 
@@ -37,19 +40,22 @@ public class UserMessageHandler {
                 .getFrom();
 
         return modelPort.chat(messageBody)
-                .flatMap(response -> {
-                    UserMessageRequest userMessageRequest = UserMessageRequest.builder()
-                            .messagingProduct("whatsapp")
-                            .recipientType("individual")
-                            .to(phoneNumber)
-                            .type("text")
-                            .text(Text.builder()
-                                    .previewUrl(false)
-                                    .body(response)
-                                    .build())
-                            .build();
+                .flatMap(response -> sendMessage(phoneNumberId, phoneNumber, response))
+                .onErrorResume(e -> sendMessage(phoneNumberId, phoneNumber, FALLBACK_MESSAGE));
+    }
 
-                    return messageGateway.sendMessage(phoneNumberId, userMessageRequest);
-                });
+    private Mono<UserMessageResponse> sendMessage(String phoneNumberId, String phoneNumber, String body) {
+        UserMessageRequest userMessageRequest = UserMessageRequest.builder()
+                .messagingProduct("whatsapp")
+                .recipientType("individual")
+                .to(phoneNumber)
+                .type("text")
+                .text(Text.builder()
+                        .previewUrl(false)
+                        .body(body)
+                        .build())
+                .build();
+
+        return messageGateway.sendMessage(phoneNumberId, userMessageRequest);
     }
 }
