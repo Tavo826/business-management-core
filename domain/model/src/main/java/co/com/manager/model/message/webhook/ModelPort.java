@@ -4,5 +4,5 @@ import reactor.core.publisher.Mono;
 
 public interface ModelPort {
 
-    Mono<String> chat(String userMessage);
+    Mono<String> chat(String userMessage, String clientId);
 }

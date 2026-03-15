@@ -1,5 +1,6 @@
 package co.com.manager.consumer.message;
 
+import co.com.manager.consumer.message.dto.*;
 import co.com.manager.model.message.user.Contact;
 import co.com.manager.model.message.user.Message;
 import co.com.manager.model.message.user.Text;

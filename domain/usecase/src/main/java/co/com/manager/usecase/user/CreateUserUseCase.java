@@ -21,12 +21,12 @@ public class CreateUserUseCase {
     public Mono<AuthResponse> create(User user) {
 
         return Mono.fromCallable(() -> {
-                    user.setPassword(encoder.encodePassword(user.getPassword()));
-                    user.setCreatedAt(LocalDateTime.now());
-                    return user;
-                })
-                .subscribeOn(Schedulers.boundedElastic())
-                .flatMap(repository::create)
-                .flatMap(authentication::authenticate);
+            user.setPassword(encoder.encodePassword(user.getPassword()));
+            user.setCreatedAt(LocalDateTime.now());
+            return user;
+        })
+        .subscribeOn(Schedulers.boundedElastic())
+        .flatMap(repository::create)
+        .flatMap(authentication::authenticate);
     }
 }
