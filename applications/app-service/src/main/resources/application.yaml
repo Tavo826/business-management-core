@@ -44,6 +44,7 @@ adapters:
     token: "${REST_USER_TOKEN}"
   gemini:
     api-key: "${GEMINI_API_KEY}"
+    memory-size: "${GEMINI_MEMORY_SIZE}"
     model-name: "${GEMINI_MODEL:gemini-2.0-flash}"
     temperature: "${GEMINI_TEMPERATURE:0.7}"
 logging:

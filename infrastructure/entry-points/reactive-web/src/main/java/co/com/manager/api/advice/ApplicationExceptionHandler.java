@@ -9,6 +9,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ServerWebInputException;
+import org.springframework.dao.DuplicateKeyException;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler {
@@ -50,6 +51,14 @@ public class ApplicationExceptionHandler {
 
         var problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getReason());
         problem.setTitle("Request Error");
+        return problem;
+    }
+
+    @ExceptionHandler(DuplicateKeyException.class)
+    public ProblemDetail handleDuplicateKeyException(DuplicateKeyException ex) {
+
+        var problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        problem.setTitle("User already exists");
         return problem;
     }
 

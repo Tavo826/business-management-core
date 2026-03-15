@@ -1,4 +1,4 @@
-package co.com.manager.consumer.message;
+package co.com.manager.consumer.message.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

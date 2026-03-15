@@ -2,7 +2,7 @@ package co.com.manager.r2dbc.repository.user;
 
 import co.com.manager.model.user.User;
 import co.com.manager.model.user.UserRepository;
-import co.com.manager.r2dbc.data.UserData;
+import co.com.manager.r2dbc.data.user.UserData;
 import co.com.manager.r2dbc.helper.ReactiveAdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;

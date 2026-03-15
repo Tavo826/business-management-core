@@ -1,4 +1,4 @@
-package co.com.manager.r2dbc.data;
+package co.com.manager.r2dbc.data.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
