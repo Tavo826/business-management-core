@@ -1,5 +1,7 @@
 package co.com.manager.usecase.message;
 
+import co.com.manager.model.message.persistence.MessageInfo;
+import co.com.manager.model.message.persistence.PersistencePort;
 import co.com.manager.model.message.user.MessageGateway;
 import co.com.manager.model.message.user.Text;
 import co.com.manager.model.message.user.UserMessageRequest;
@@ -39,8 +41,8 @@ public class UserMessageHandler {
                 .getMessages().getFirst()
                 .getFrom();
 
-        return modelPort.chat(messageBody)
-                .flatMap(response -> sendMessage(phoneNumberId, phoneNumber, response))
+        return modelPort.chat(messageBody, phoneNumber)
+                .flatMap(modelResponse -> sendMessage(phoneNumberId, phoneNumber, modelResponse))
                 .onErrorResume(e -> sendMessage(phoneNumberId, phoneNumber, FALLBACK_MESSAGE));
     }
 

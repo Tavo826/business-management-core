@@ -148,3 +148,65 @@ curl -vI https://customermanagement.top 2>&1 | grep 'SSL certificate'
 
 - Verificar que HTTP redirige a HTTPS
 curl -I http://customermanagement.top
+
+### DB
+
+psql -U postgres
+CREATE DATABASE database_name;
+
+CREATE TABLE users (
+    document_id VARCHAR(50) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    birthdate DATE, -- O VARCHAR si prefieres mantenerlo como el String de Java
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE business (
+    nit VARCHAR(50) PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    description TEXT,
+    phone VARCHAR(20),
+    email VARCHAR(150),
+    address VARCHAR(255),
+    owner_document_id VARCHAR(50) NOT NULL,
+
+    social_media_list JSONB DEFAULT '[]'::jsonb,
+    bank_account_list JSONB DEFAULT '[]'::jsonb,
+    
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_owner_user 
+        FOREIGN KEY (owner_document_id) 
+        REFERENCES users(document_id) 
+        ON DELETE CASCADE
+);
+
+CREATE TABLE messages (
+    id VARCHAR(50) PRIMARY KEY,
+    message_id VARCHAR(100) UNIQUE,
+    received_message TEXT,
+    sender_phone VARCHAR(20),
+    response_message TEXT,
+    sent_time TIMESTAMP WITHOUT TIME ZONE
+);
+
+-- Índice para búsquedas por messageId
+CREATE INDEX idx_messages_message_id ON messages(message_id);
+
+
+### Ambiente Meta
+
+- Configurar webhook: https://customermanagement.top/webhook
+
+#### Local (Ngrok)
+
+```bash
+ngrok -v
+ngrok http 8080
+```
+

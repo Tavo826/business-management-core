@@ -1,4 +1,4 @@
-package co.com.manager.r2dbc.data;
+package co.com.manager.r2dbc.data.business;
 
 import io.r2dbc.postgresql.codec.Json;
 import lombok.AllArgsConstructor;

@@ -4,7 +4,7 @@ import co.com.manager.model.bank.BankAccount;
 import co.com.manager.model.business.Business;
 import co.com.manager.model.business.BusinessRepository;
 import co.com.manager.model.social.SocialMedia;
-import co.com.manager.r2dbc.data.BusinessData;
+import co.com.manager.r2dbc.data.business.BusinessData;
 import co.com.manager.r2dbc.helper.ReactiveAdapterOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
