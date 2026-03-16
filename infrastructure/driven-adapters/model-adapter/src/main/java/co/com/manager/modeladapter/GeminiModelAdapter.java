@@ -24,12 +24,12 @@ public class GeminiModelAdapter implements ModelPort {
 
     private final ChatModel chatModel;
     private final String systemPrompt;
-    private final int memorySize;
+    private final String memorySize;
     private final ConcurrentHashMap<String, ChatMemory> clientMemories = new ConcurrentHashMap<>();
 
     public GeminiModelAdapter(
             ChatModel chatModel,
-            @Value("${adapters.gemini.memory-size}") int memorySize,
+            @Value("${adapters.gemini.memory-size}") String memorySize,
             @Value("classpath:prompts/system-prompt.txt") Resource systemPromptResource) throws IOException {
         this.chatModel = chatModel;
         this.memorySize = memorySize;
@@ -45,7 +45,7 @@ public class GeminiModelAdapter implements ModelPort {
 
     private String processChat(String userMessage, String clientId) {
         ChatMemory memory = clientMemories.computeIfAbsent(clientId, id -> {
-            ChatMemory newMemory = MessageWindowChatMemory.withMaxMessages(memorySize);
+            ChatMemory newMemory = MessageWindowChatMemory.withMaxMessages(Integer.parseInt(memorySize));
             newMemory.add(SystemMessage.from(systemPrompt));
             return newMemory;
         });
