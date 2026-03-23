@@ -20,9 +20,9 @@ public class AuthUserUseCase {
     public Mono<AuthResponse> authenticate(AuthCredentials credentials) {
 
         return userRepository.findUserByEmail(credentials.getEmail())
-                .switchIfEmpty(Mono.error(new UserNotFoundException("[email: " + credentials.getEmail() + "]")))
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new UserNotFoundException("[email: " + credentials.getEmail() + "]"))))
                 .filterWhen(user -> encoderPort.verifyPassword(credentials.getPassword(), user.getPassword()))
-                .switchIfEmpty(Mono.error(new InvalidPasswordException()))
+                .switchIfEmpty(Mono.defer(() ->Mono.error(new InvalidPasswordException())))
                 .flatMap(authenticationPort::authenticate);
     }
 }
