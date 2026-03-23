@@ -51,7 +51,11 @@ public class JwtAdapter implements AuthenticationPort {
     @Override
     public Mono<String> extractMail(String token) {
 
-        return Mono.just(extractClaims(token).getSubject());
+        try {
+            return Mono.justOrEmpty(extractClaims(token).getSubject());
+        } catch (Exception e) {
+            return Mono.empty();
+        }
     }
 
     private boolean isTokenExpired(String token) {

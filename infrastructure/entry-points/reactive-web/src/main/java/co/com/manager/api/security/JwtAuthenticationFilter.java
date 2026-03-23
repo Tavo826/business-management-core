@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter implements WebFilter {
             "/api/status",
             "/webhook",
             "/api/users",
+            "/api/users/",
             "/api/users/auth"
     );
 
