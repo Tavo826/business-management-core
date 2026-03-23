@@ -81,9 +81,7 @@ server {
 ´´´
 
 BUILDX_VERSION=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep tag_name | cut -d '"' -f 4)
-
-sudo curl -SL "https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.linux-$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-buildx
-
+sudo curl -SL "https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.linux-amd64" -o /usr/local/lib/docker/cli-plugins/docker-buildx
 sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
 
 sudo docker compose up -d --build
@@ -93,7 +91,14 @@ sudo docker logs nginx --tail=100
 
 ** Cambiar la ip de la EC2 en namecheap (public ipv4)
 
+sudo chmod -R 777 certbot/www
+sudo chmod -R 777 certbot/conf
+
+------------------------------------------------------
 sudo docker compose run --rm certbot certonly --webroot -w /var/www/certbot -d customermanagement.top -d www.customermanagement.top --email 9gagigor816@gmail.com --agree-tos --no-eff-email
+------------------------------------------------------
+
+sudo docker run --rm -it -v "$(pwd)/certbot/conf:/etc/letsencrypt" -v "$(pwd)/certbot/www:/var/www/certbot" certbot/certbot certonly --webroot -w /var/www/certbot -d customermanagement.top -d www.customermanagement.top --email 9gagigor816@gmail.com --agree-tos --no-eff-email
 
 nano nginx/conf.d/default.conf
 

@@ -4,6 +4,9 @@ import co.com.manager.model.token.AuthCredentials;
 import co.com.manager.model.user.User;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 @Component
 public class UserMapper {
 
@@ -14,7 +17,7 @@ public class UserMapper {
                 .name(request.getName())
                 .surname(request.getSurname())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(decodeBase64(request.getPassword()))
                 .birthdate(request.getBirthdate())
                 .build();
     }
@@ -33,8 +36,12 @@ public class UserMapper {
 
         return AuthCredentials.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(decodeBase64(request.getPassword()))
                 .build();
+    }
+
+    private static String decodeBase64(String encoded) {
+        return new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);
     }
 
     public static UserResponse toResponse(User user) {
