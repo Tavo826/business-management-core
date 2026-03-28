@@ -13,7 +13,7 @@ public class DeleteUserByIdUseCase {
 
     public Mono<Void> delete(String id) {
 
-        return repository.delete(id)
-                .then(businessRepository.deleteAllBusinessByUserId(id));
+        return businessRepository.deleteAllBusinessByUserId(id)
+                .then(repository.delete(id));
     }
 }

@@ -2,6 +2,8 @@ package co.com.manager.usecase.user;
 
 import co.com.manager.model.encoder.EncoderPort;
 import co.com.manager.model.exceptions.UserNotFoundException;
+import co.com.manager.model.token.AuthResponse;
+import co.com.manager.model.token.AuthenticationPort;
 import co.com.manager.model.user.User;
 import co.com.manager.model.user.UserRepository;
 import lombok.AllArgsConstructor;
@@ -14,8 +16,9 @@ public class UpdateUserUseCase {
 
     private final UserRepository repository;
     private final EncoderPort encoder;
+    private final AuthenticationPort authentication;
 
-    public Mono<User> update(String id, User user) {
+    public Mono<AuthResponse> update(String id, User user) {
 
         return repository.findUserById(id)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("[id: " + id + "]")))
@@ -28,7 +31,8 @@ public class UpdateUserUseCase {
 
                     return actualUser;
                 })
-                .flatMap(repository::update);
+                .flatMap(repository::update)
+                .flatMap(authentication::authenticate);
     }
 
     public Mono<User> updatePassword(String id, String password) {
