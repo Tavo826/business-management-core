@@ -18,19 +18,14 @@ public class UpdateBusinessUseCase {
         return repository.findBusinessById(id)
                 .switchIfEmpty(Mono.error(new BusinessNotFoundException(id)))
                 .map(actualBusiness -> {
-                    var actualSocialMediaList = actualBusiness.getSocialMediaList();
-                    var actualBankAccountList = actualBusiness.getBankAccountList();
-
-                    actualSocialMediaList.addAll(business.getSocialMediaList());
-                    actualBankAccountList.addAll(business.getBankAccountList());
 
                     actualBusiness.setName(business.getName());
                     actualBusiness.setDescription(business.getDescription());
                     actualBusiness.setPhone(business.getPhone());
                     actualBusiness.setEmail(business.getEmail());
                     actualBusiness.setAddress(business.getAddress());
-                    actualBusiness.setSocialMediaList(actualSocialMediaList);
-                    actualBusiness.setBankAccountList(actualBankAccountList);
+                    actualBusiness.setSocialMediaList(business.getSocialMediaList());
+                    actualBusiness.setBankAccountList(business.getBankAccountList());
                     actualBusiness.setUpdatedAt(LocalDateTime.now());
 
                     return actualBusiness;

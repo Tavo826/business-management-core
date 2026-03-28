@@ -97,9 +97,8 @@ public class UserHandler {
 
                     return updateUserUseCase.update(id, UserMapper.toEntity(updateUserRequest));
                 })
-                .map(UserMapper::toResponse)
-                .flatMap(updatedUser -> ServerResponse.ok()
-                        .bodyValue(updatedUser)
+                .flatMap(tokenResponse -> ServerResponse.ok()
+                        .bodyValue(tokenResponse)
                 );
     }
 
