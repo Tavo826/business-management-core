@@ -160,40 +160,16 @@ curl -I http://customermanagement.top
 
 ### DB
 
-psql -U postgres
-CREATE DATABASE database_name;
+sudo docker exec -it postgres-db psql -U postgres
+CREATE DATABASE business_manager_db;
 
-CREATE TABLE users (
-    document_id VARCHAR(50) PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    surname VARCHAR(100) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    birthdate DATE, -- O VARCHAR si prefieres mantenerlo como el String de Java
-    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+\c business_manager_db
 
-CREATE TABLE business (
-    nit VARCHAR(50) PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,
-    description TEXT,
-    phone VARCHAR(20),
-    email VARCHAR(150),
-    address VARCHAR(255),
-    owner_document_id VARCHAR(50) NOT NULL,
+CREATE TABLE users (document_id VARCHAR(50) PRIMARY KEY, name VARCHAR(100) NOT NULL, surname VARCHAR(100) NOT NULL, email VARCHAR(150) UNIQUE NOT NULL, password VARCHAR(255) NOT NULL, birthdate VARCHAR(20), created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP);
 
-    social_media_list JSONB DEFAULT '[]'::jsonb,
-    bank_account_list JSONB DEFAULT '[]'::jsonb,
-    
-    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE business (nit VARCHAR(50) PRIMARY KEY, name VARCHAR(150) NOT NULL, description TEXT, phone VARCHAR(20), email VARCHAR(150), address VARCHAR(255), owner_document_id VARCHAR(50) NOT NULL, social_media_list JSONB DEFAULT '[]'::jsonb, bank_account_list JSONB DEFAULT '[]'::jsonb, created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, CONSTRAINT fk_owner_user FOREIGN KEY (owner_document_id) REFERENCES users(document_id) ON DELETE CASCADE);
 
-    CONSTRAINT fk_owner_user 
-        FOREIGN KEY (owner_document_id) 
-        REFERENCES users(document_id) 
-        ON DELETE CASCADE
-);
+\d users
 
 CREATE TABLE messages (
     id VARCHAR(50) PRIMARY KEY,
@@ -219,3 +195,5 @@ ngrok -v
 ngrok http 8080
 ```
 
+
+SELECT document_id, name, surname, email, password, birthdate, created_at, updated_at FROM users WHERE email = 'un_email_de_prueba@ejemplo.com';

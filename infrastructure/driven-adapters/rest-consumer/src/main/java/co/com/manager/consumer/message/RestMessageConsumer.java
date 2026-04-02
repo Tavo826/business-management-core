@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RestConsumer implements MessageGateway {
+public class RestMessageConsumer implements MessageGateway {
 
     @Qualifier("messageWebClient")
     private final WebClient client;

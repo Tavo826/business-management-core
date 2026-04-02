@@ -30,16 +30,16 @@ public class MessageConsumerConfig {
     }
 
     @Bean(name = "messageWebClient")
-    public WebClient getMessageWebClient(WebClient.Builder builder) {
+    public WebClient sendMessageWebClient(WebClient.Builder builder) {
         return builder
                 .baseUrl(url)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .clientConnector(getMessageClientHttpConnector())
+                .clientConnector(sendMessageClientHttpConnector())
                 .build();
     }
 
-    private ClientHttpConnector getMessageClientHttpConnector() {
+    private ClientHttpConnector sendMessageClientHttpConnector() {
 
         return new ReactorClientHttpConnector(HttpClient.create()
                 .compress(true)
