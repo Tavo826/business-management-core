@@ -25,6 +25,9 @@ public class RestStockConsumer implements StockGateway {
     @Override
     @CircuitBreaker(name = "stockRequest", fallbackMethod = "stockRequestFallback")
     public Mono<Stock> getStock(String userMessage) {
+
+        log.info("Getting stock from info");
+
         return client
                 .get()
                 .uri(uriBuilder -> uriBuilder

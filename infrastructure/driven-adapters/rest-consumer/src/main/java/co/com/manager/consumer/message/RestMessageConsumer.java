@@ -28,6 +28,9 @@ public class RestMessageConsumer implements MessageGateway {
     @Override
     @CircuitBreaker(name = "messageChat", fallbackMethod = "messageChatFallback")
     public Mono<UserMessageResponse> sendMessage(String phoneNumberId, UserMessageRequest request) {
+
+        log.info("Sending response message to client");
+
         return client
                 .post()
                 .uri(uriBuilder -> uriBuilder.path("/{phoneNumberId}/messages").build(phoneNumberId))
