@@ -44,4 +44,10 @@ public class RestStockConsumer implements StockGateway {
                     return new StockGetException("Network error getting stock", e);
                 });
     }
+
+    public Mono<Stock> stockRequestFallback(String userMessage, Throwable cause) {
+        log.error("Circuit breaking activated for cause={}", cause.getMessage());
+        return Mono.error(new StockGetException(
+                "Stock service unavailable", cause));
+    }
 }
