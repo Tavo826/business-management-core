@@ -13,6 +13,8 @@
 
 sudo docker stop $(sudo docker ps -aq) && sudo docker rm $(sudo docker ps -aq)
 sudo docker system prune -a --volumes -f
+sudo docker volume ls
+sudo docker volume rm business-management-core_postgres_data
 sudo rm -rf business-management-core
 
 ** - 1. Actualizar el .jar
@@ -194,6 +196,3 @@ CREATE INDEX idx_messages_message_id ON messages(message_id);
 ngrok -v
 ngrok http 8080
 ```
-
-
-SELECT document_id, name, surname, email, password, birthdate, created_at, updated_at FROM users WHERE email = 'un_email_de_prueba@ejemplo.com';

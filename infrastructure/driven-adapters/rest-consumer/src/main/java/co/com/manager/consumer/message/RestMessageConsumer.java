@@ -57,6 +57,6 @@ public class RestMessageConsumer implements MessageGateway {
     public Mono<UserMessageResponse> messageChatFallback(String phoneNumberId, UserMessageRequest request, Throwable cause) {
         log.error("Circuit breaker activated for phoneNumberId={}, cause={}", phoneNumberId, cause.getMessage());
         return Mono.error(new MessageSendException(
-                "Service unavailable for phoneNumberId=%s".formatted(phoneNumberId), cause));
+                "Message service unavailable for phoneNumberId=%s".formatted(phoneNumberId), cause));
     }
 }
