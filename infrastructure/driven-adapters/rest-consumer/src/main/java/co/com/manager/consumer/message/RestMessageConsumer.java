@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RestConsumer implements MessageGateway {
+public class RestMessageConsumer implements MessageGateway {
 
     @Qualifier("messageWebClient")
     private final WebClient client;
@@ -28,6 +28,9 @@ public class RestConsumer implements MessageGateway {
     @Override
     @CircuitBreaker(name = "messageChat", fallbackMethod = "messageChatFallback")
     public Mono<UserMessageResponse> sendMessage(String phoneNumberId, UserMessageRequest request) {
+
+        log.info("Sending response message to client");
+
         return client
                 .post()
                 .uri(uriBuilder -> uriBuilder.path("/{phoneNumberId}/messages").build(phoneNumberId))

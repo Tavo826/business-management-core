@@ -20,7 +20,7 @@ management:
     circuitbreakers:
       enabled: true
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080"
+  allowed-origins: "http://localhost:4200,http://localhost:8080,https://tavo826.github.io/"
 security:
   jwt:
     secret: "${JWT_SECRET}"
@@ -42,6 +42,9 @@ adapters:
     timeout: 5000
     url: "${URI_USER_MESSAGE}"
     token: "${REST_USER_TOKEN}"
+  reststockconsumer:
+    timeout: 5000
+    url: "${URI_STOCK_SERVICE}"
   gemini:
     api-key: "${GEMINI_API_KEY}"
     memory-size: "${GEMINI_MEMORY_SIZE}"
