@@ -1,7 +1,7 @@
 package co.com.manager.consumer;
 
 
-import co.com.manager.consumer.message.RestConsumer;
+import co.com.manager.consumer.message.RestMessageConsumer;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterAll;
@@ -18,7 +18,7 @@ import java.io.IOException;
 
 class RestConsumerTest {
 
-    private static RestConsumer restConsumer;
+    private static RestMessageConsumer restMessageConsumer;
 
     private static MockWebServer mockBackEnd;
 
@@ -28,7 +28,7 @@ class RestConsumerTest {
         mockBackEnd = new MockWebServer();
         mockBackEnd.start();
         var webClient = WebClient.builder().baseUrl(mockBackEnd.url("/").toString()).build();
-        restConsumer = new RestConsumer(webClient);
+        restMessageConsumer = new RestMessageConsumer(webClient);
     }
 
     @AfterAll
@@ -45,7 +45,7 @@ class RestConsumerTest {
                 .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .setResponseCode(HttpStatus.OK.value())
                 .setBody("{\"state\" : \"ok\"}"));
-        var response = restConsumer.testGet();
+        var response = restMessageConsumer.testGet();
 
         StepVerifier.create(response)
                 .expectNextMatches(objectResponse -> objectResponse.getState().equals("ok"))
@@ -60,7 +60,7 @@ class RestConsumerTest {
                 .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .setResponseCode(HttpStatus.OK.value())
                 .setBody("{\"state\" : \"ok\"}"));
-        var response = restConsumer.testPost();
+        var response = restMessageConsumer.testPost();
 
         StepVerifier.create(response)
                 .expectNextMatches(objectResponse -> objectResponse.getState().equals("ok"))

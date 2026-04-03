@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.r2dbc.postgresql.codec.Json;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Repository
 public class BusinessRepositoryAdapter extends ReactiveAdapterOperations<
         Business,
@@ -75,22 +77,34 @@ public class BusinessRepositoryAdapter extends ReactiveAdapterOperations<
 
     @Override
     public Mono<Business> findBusinessById(String id) {
+
+        log.info("Finding business by id {}", id);
+
         return findById(id);
     }
 
     @Override
     public Flux<Business> findAllBusinessByUserId(String userId) {
+
+        log.info("Finding business by user id {}", userId);
+
         return repository.findAllByOwnerDocumentId(userId)
                 .map(this::toEntity);
     }
 
     @Override
     public Mono<Business> create(Business business) {
+
+        log.info("Creating business");
+
         return save(business);
     }
 
     @Override
     public Mono<Business> update(Business business) {
+
+        log.info("Updating business");
+
         return Mono.just(toData(business))
                 .doOnNext(businessData -> businessData.setNew(false))
                 .flatMap(this::saveData)
@@ -99,11 +113,13 @@ public class BusinessRepositoryAdapter extends ReactiveAdapterOperations<
 
     @Override
     public Mono<Void> delete(String id) {
+        log.info("Deleting business with id {}", id);
         return repository.deleteById(id);
     }
 
     @Override
     public Mono<Void> deleteAllBusinessByUserId(String userId) {
+        log.info("Deleting business by user id {}", userId);
         return repository.deleteAllByOwnerDocumentId(userId);
     }
 
