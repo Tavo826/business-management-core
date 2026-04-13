@@ -1,9 +1,10 @@
 package co.com.manager.config;
 
-import co.com.manager.model.message.user.MessageGateway;
-import co.com.manager.model.message.webhook.ModelPort;
 import co.com.manager.model.business.BusinessRepository;
 import co.com.manager.model.encoder.EncoderPort;
+import co.com.manager.model.message.user.MessageGateway;
+import co.com.manager.model.message.webhook.ModelPort;
+import co.com.manager.model.order.OrderRepository;
 import co.com.manager.model.token.AuthenticationPort;
 import co.com.manager.model.token.TokenValidator;
 import co.com.manager.model.user.UserRepository;
@@ -72,6 +73,11 @@ class UseCasesConfigTest {
         @Bean
         public TokenValidator tokenValidator() {
             return Mockito.mock(TokenValidator.class);
+        }
+
+        @Bean
+        public OrderRepository orderRepository() {
+            return Mockito.mock(OrderRepository.class);
         }
     }
 }

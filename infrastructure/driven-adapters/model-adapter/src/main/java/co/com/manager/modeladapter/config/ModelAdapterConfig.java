@@ -1,7 +1,12 @@
 package co.com.manager.modeladapter.config;
 
+import co.com.manager.model.business.Business;
+import co.com.manager.model.business.BusinessContext;
+import co.com.manager.model.message.user.MessageGateway;
+import co.com.manager.model.order.OrderRepository;
 import co.com.manager.model.stock.StockGateway;
 import co.com.manager.modeladapter.Assistant;
+import co.com.manager.modeladapter.tool.OrderTool;
 import co.com.manager.modeladapter.tool.StockTool;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
@@ -36,9 +41,15 @@ public class ModelAdapterConfig {
     }
 
     @Bean
+    public OrderTool orderTool(OrderRepository orderRepository, MessageGateway messageGateway) {
+        return new OrderTool(orderRepository, messageGateway);
+    }
+
+    @Bean
     public Assistant assistant(
             ChatModel chatModel,
             StockTool stockTool,
+            OrderTool orderTool,
             @Value("${adapters.gemini.memory-size}") int memorySize,
             @Value("classpath:prompts/system-prompt.txt") Resource systemPromptResource) throws IOException {
 
@@ -49,8 +60,14 @@ public class ModelAdapterConfig {
                 .chatModel(chatModel)
                 .chatMemoryProvider(clientId ->
                         MessageWindowChatMemory.withMaxMessages(memorySize))
-                .systemMessageProvider(clientId -> systemPrompt)
-                .tools(stockTool)
+                .systemMessageProvider(clientId -> {
+                    Business business = BusinessContext.get();
+                    if (business != null && business.getDescription() != null) {
+                        return systemPrompt.replace("{business_description}", business.getDescription());
+                    }
+                    return systemPrompt;
+                })
+                .tools(stockTool, orderTool)
                 .build();
     }
 }

@@ -4,8 +4,6 @@ import co.com.manager.model.token.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 public class ValidateWebhookTokenUseCase {
 

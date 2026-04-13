@@ -9,5 +9,6 @@ import reactor.core.publisher.Mono;
 public interface BusinessDataRepository extends ReactiveCrudRepository<BusinessData, String>, ReactiveQueryByExampleExecutor<BusinessData> {
 
     Flux<BusinessData> findAllByOwnerDocumentId(String userId);
+    Mono<BusinessData> findByPhoneNumberId(String phoneNumberId);
     Mono<Void> deleteAllByOwnerDocumentId(String id);
 }

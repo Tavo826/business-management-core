@@ -2,14 +2,13 @@ package co.com.manager.api.handler;
 
 import co.com.manager.api.dtos.message.ClientMessageDto;
 import co.com.manager.api.dtos.message.ClientMessageMapper;
-import co.com.manager.usecase.message.UserMessageHandler;
+import co.com.manager.usecase.message.UserMessageHandlerUseCase;
 import co.com.manager.usecase.validation.ValidateWebhookTokenUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.util.Optional;
 
@@ -18,7 +17,7 @@ import java.util.Optional;
 public class MessageHandler {
 
     private final ValidateWebhookTokenUseCase validateWebhookTokenUseCase;
-    private final UserMessageHandler userMessageHandler;
+    private final UserMessageHandlerUseCase userMessageHandlerUseCase;
     private final ClientMessageMapper clientMessageMapper;
 
     public Mono<ServerResponse> apiStatus(ServerRequest serverRequest) {
@@ -41,7 +40,7 @@ public class MessageHandler {
 
         return serverRequest.bodyToMono(ClientMessageDto.class)
                 .map(clientMessageMapper::toDomain)
-                .flatMap(userMessageHandler::handleMessage)
+                .flatMap(userMessageHandlerUseCase::handleMessage)
                 .flatMap(userMessage -> ServerResponse.ok().bodyValue(userMessage));
     }
 }

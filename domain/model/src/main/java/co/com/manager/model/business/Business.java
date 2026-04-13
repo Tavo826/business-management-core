@@ -23,6 +23,7 @@ public class Business {
     private String email;
     private String address;
     private String ownerDocumentId;
+    private String phoneNumberId;
     private List<SocialMedia> socialMediaList;
     private List<BankAccount> bankAccountList;
     private LocalDateTime createdAt;
