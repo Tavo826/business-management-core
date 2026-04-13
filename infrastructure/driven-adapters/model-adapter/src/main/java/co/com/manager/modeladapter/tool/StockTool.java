@@ -21,17 +21,22 @@ public class StockTool {
             @P("Consulta de búsqueda del producto, por ejemplo: 'camisetas', 'zapatos deportivos', 'talla M'") String query) {
         log.info("Tool invocado - buscando productos con query: {}", query);
 
-        Stock stock = stockGateway.getStock(query).block();
+        try {
+            Stock stock = stockGateway.getStock(query).block();
 
-        if (stock == null || stock.getResults() == null || stock.getResults().isEmpty()) {
-            return "No se encontraron productos para la búsqueda: " + query;
+            if (stock == null || stock.getResults() == null || stock.getResults().isEmpty()) {
+                return "No se encontraron productos para la búsqueda: " + query;
+            }
+
+            String productList = stock.getResults().stream()
+                    .map(this::formatProduct)
+                    .collect(Collectors.joining("\n"));
+
+            return String.format("Se encontraron %d productos:\n%s", stock.getTotalFound(), productList);
+        } catch (Exception e) {
+            log.error("Error al consultar el stock para query '{}': {}", query, e.getMessage(), e);
+            return "Error al consultar el inventario. Intenta de nuevo más tarde.";
         }
-
-        String productList = stock.getResults().stream()
-                .map(this::formatProduct)
-                .collect(Collectors.joining("\n"));
-
-        return String.format("Se encontraron %d productos:\n%s", stock.getTotalFound(), productList);
     }
 
     private String formatProduct(Product product) {

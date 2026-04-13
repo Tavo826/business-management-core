@@ -8,7 +8,6 @@ import co.com.manager.model.stock.StockGateway;
 import co.com.manager.modeladapter.Assistant;
 import co.com.manager.modeladapter.tool.OrderTool;
 import co.com.manager.modeladapter.tool.StockTool;
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
@@ -46,11 +45,16 @@ public class ModelAdapterConfig {
     }
 
     @Bean
+    public ChatMemoryRegistry chatMemoryRegistry(@Value("${adapters.gemini.memory-size}") int memorySize) {
+        return new ChatMemoryRegistry(memorySize);
+    }
+
+    @Bean
     public Assistant assistant(
             ChatModel chatModel,
             StockTool stockTool,
             OrderTool orderTool,
-            @Value("${adapters.gemini.memory-size}") int memorySize,
+            ChatMemoryRegistry chatMemoryRegistry,
             @Value("classpath:prompts/system-prompt.txt") Resource systemPromptResource) throws IOException {
 
         String systemPrompt = new String(
@@ -58,8 +62,7 @@ public class ModelAdapterConfig {
 
         return AiServices.builder(Assistant.class)
                 .chatModel(chatModel)
-                .chatMemoryProvider(clientId ->
-                        MessageWindowChatMemory.withMaxMessages(memorySize))
+                .chatMemoryProvider(chatMemoryRegistry::get)
                 .systemMessageProvider(clientId -> {
                     Business business = BusinessContext.get();
                     if (business != null && business.getDescription() != null) {
