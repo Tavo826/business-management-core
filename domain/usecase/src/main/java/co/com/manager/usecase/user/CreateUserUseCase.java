@@ -24,6 +24,7 @@ public class CreateUserUseCase {
             user.setPassword(encoder.encodePassword(user.getPassword()));
             user.setCreatedAt(LocalDateTime.now());
             user.setUpdatedAt(LocalDateTime.now());
+
             return user;
         })
         .subscribeOn(Schedulers.boundedElastic())

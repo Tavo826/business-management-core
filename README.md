@@ -167,7 +167,7 @@ CREATE DATABASE business_manager_db;
 
 \c business_manager_db
 
-CREATE TABLE users (document_id VARCHAR(20) PRIMARY KEY, name VARCHAR(50) NOT NULL, surname VARCHAR(50) NOT NULL, email VARCHAR(100) UNIQUE NOT NULL, password VARCHAR(50) NOT NULL, birthdate VARCHAR(20), created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE users (document_id VARCHAR(20) PRIMARY KEY, name VARCHAR(50) NOT NULL, surname VARCHAR(50) NOT NULL, email VARCHAR(100) UNIQUE NOT NULL, password VARCHAR(100) NOT NULL, birthdate VARCHAR(20), created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE business (nit VARCHAR(25) PRIMARY KEY, name VARCHAR(100) NOT NULL, description TEXT, phone VARCHAR(20), email VARCHAR(50), address VARCHAR(50), owner_document_id VARCHAR(20) NOT NULL, phone_number_id VARCHAR(20) NOT NULL, social_media_list JSONB DEFAULT '[]'::jsonb, bank_account_list JSONB DEFAULT '[]'::jsonb, created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, CONSTRAINT fk_owner_user FOREIGN KEY (owner_document_id) REFERENCES users(document_id) ON DELETE CASCADE);
 
@@ -180,6 +180,8 @@ CREATE TABLE order_items ( id VARCHAR(50) PRIMARY KEY, order_id VARCHAR(50) NOT 
 -- Índice para búsquedas por messageId
 CREATE INDEX idx_messages_message_id ON messages(message_id);
 
+TRUNCATE TABLE table_name
+TRUNCATE TABLE table_name CASCADE;
 
 ### Ambiente Meta
 
