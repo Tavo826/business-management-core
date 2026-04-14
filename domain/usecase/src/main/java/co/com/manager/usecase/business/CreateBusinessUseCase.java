@@ -17,6 +17,7 @@ public class CreateBusinessUseCase {
 
         return Mono.fromCallable(() -> {
             business.setCreatedAt(LocalDateTime.now());
+            business.setUpdatedAt(LocalDateTime.now());
             return business;
         })
         .subscribeOn(Schedulers.boundedElastic())
