@@ -62,6 +62,7 @@ public class OrderTool {
                 .totalAmount(total)
                 .items(items)
                 .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         try {
