@@ -1,6 +1,5 @@
-package co.com.manager.r2dbc.data.business;
+package co.com.manager.r2dbc.data.order;
 
-import io.r2dbc.postgresql.codec.Json;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,26 +9,24 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table("business")
-public class BusinessData implements Persistable<String> {
+@Table("orders")
+public class OrderData implements Persistable<String> {
 
     @Id
-    private String nit;
-    private String name;
-    private String description;
-    private String phone;
-    private String email;
-    private String address;
-    private String ownerDocumentId;
-    private String phoneNumberId;
-    private Json socialMediaList;
-    private Json bankAccountList;
+    private String id;
+    private String businessId;
+    private String customerName;
+    private String customerPhone;
+    private String customerAddress;
+    private String status;
+    private BigDecimal totalAmount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -39,6 +36,6 @@ public class BusinessData implements Persistable<String> {
 
     @Override
     public String getId() {
-        return nit;
+        return id;
     }
 }

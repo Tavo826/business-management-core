@@ -1,6 +1,5 @@
 package co.com.manager.r2dbc.repository.message;
 
-import co.com.manager.model.message.persistence.MessageInfo;
 import co.com.manager.r2dbc.data.message.MessageInfoData;
 import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;

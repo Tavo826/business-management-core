@@ -1,15 +1,12 @@
 package co.com.manager.api.advice;
 
-import co.com.manager.model.exceptions.BusinessNotFoundException;
-import co.com.manager.model.exceptions.InvalidPasswordException;
-import co.com.manager.model.exceptions.InvalidTokenException;
-import co.com.manager.model.exceptions.UserNotFoundException;
+import co.com.manager.model.exceptions.*;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ServerWebInputException;
-import org.springframework.dao.DuplicateKeyException;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler {
@@ -30,6 +27,14 @@ public class ApplicationExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ProblemDetail handleOrderNotFoundException(OrderNotFoundException ex) {
+
+        var problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problem.setTitle("Order Not Found");
+        return problem;
+    }
+
     @ExceptionHandler(InvalidTokenException.class)
     public ProblemDetail handleInvalidTokenException(InvalidTokenException ex) {
 
@@ -43,6 +48,14 @@ public class ApplicationExceptionHandler {
 
         var problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
         problem.setTitle("Invalid Password");
+        return problem;
+    }
+
+    @ExceptionHandler(StockGetException.class)
+    public ProblemDetail handleStockGetException(StockGetException ex) {
+
+        var problem = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        problem.setTitle("Stock Not Found");
         return problem;
     }
 

@@ -1,8 +1,8 @@
 package co.com.manager.usecase.user;
 
 import co.com.manager.model.encoder.EncoderPort;
-import co.com.manager.model.token.AuthenticationPort;
 import co.com.manager.model.token.AuthResponse;
+import co.com.manager.model.token.AuthenticationPort;
 import co.com.manager.model.user.User;
 import co.com.manager.model.user.UserRepository;
 import lombok.AllArgsConstructor;
