@@ -51,6 +51,7 @@ public class BusinessRepositoryAdapter extends ReactiveAdapterOperations<
                 .email(data.getEmail())
                 .address(data.getAddress())
                 .ownerDocumentId(data.getOwnerDocumentId())
+                .phoneNumberId(data.getPhoneNumberId())
                 .socialMediaList(deserializeSocialMedia(data.getSocialMediaList()))
                 .bankAccountList(deserializeBankAccount(data.getBankAccountList()))
                 .createdAt(data.getCreatedAt())
@@ -68,6 +69,7 @@ public class BusinessRepositoryAdapter extends ReactiveAdapterOperations<
                 .email(entity.getEmail())
                 .address(entity.getAddress())
                 .ownerDocumentId(entity.getOwnerDocumentId())
+                .phoneNumberId(entity.getPhoneNumberId())
                 .socialMediaList(serializeToJson(entity.getSocialMediaList()))
                 .bankAccountList(serializeToJson(entity.getBankAccountList()))
                 .createdAt(entity.getCreatedAt())
@@ -81,6 +83,15 @@ public class BusinessRepositoryAdapter extends ReactiveAdapterOperations<
         log.info("Finding business by id {}", id);
 
         return findById(id);
+    }
+
+    @Override
+    public Mono<Business> findByPhoneNumberId(String phoneNumberId) {
+
+        log.info("Finding business by phoneNumberId {}", phoneNumberId);
+
+        return repository.findByPhoneNumberId(phoneNumberId)
+                .map(this::toEntity);
     }
 
     @Override

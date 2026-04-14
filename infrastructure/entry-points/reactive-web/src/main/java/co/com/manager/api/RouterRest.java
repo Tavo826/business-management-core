@@ -2,6 +2,7 @@ package co.com.manager.api;
 
 import co.com.manager.api.handler.BusinessHandler;
 import co.com.manager.api.handler.MessageHandler;
+import co.com.manager.api.handler.OrderHandler;
 import co.com.manager.api.handler.UserHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,11 +36,20 @@ public class RouterRest {
     }
 
     @Bean
+    public RouterFunction<ServerResponse> orderRoutes(OrderHandler orderHandler) {
+        return RouterFunctions.route()
+                .GET("/api/orders/{businessId}/business", orderHandler::findAllOrdersByBusiness)
+                .GET("/api/orders/{id}", orderHandler::findOrderById)
+                .PATCH("/api/orders/{id}/status", orderHandler::updateOrderStatus)
+                .build();
+    }
+
+    @Bean
     public RouterFunction<ServerResponse> businessRoutes(BusinessHandler businessHandler) {
         return RouterFunctions.route()
                 .GET("/api/businesses/{id}", businessHandler::findBusinessById)
                 .GET("/api/businesses/users/{id}", businessHandler::findBusinessByUserId)
-                .POST("/api/businesses/", businessHandler::createBusiness)
+                .POST("/api/businesses", businessHandler::createBusiness)
                 .PUT("/api/businesses/{id}", businessHandler::updateBusiness)
                 .PUT("/api/businesses/users/{id}", businessHandler::updateBusiness)
                 .DELETE("/api/businesses/{id}", businessHandler::deleteBusiness)

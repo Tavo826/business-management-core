@@ -1,14 +1,6 @@
 package co.com.manager.api.dtos.message;
 
-import co.com.manager.model.message.webhook.Change;
-import co.com.manager.model.message.webhook.ClientMessage;
-import co.com.manager.model.message.webhook.Contact;
-import co.com.manager.model.message.webhook.Entry;
-import co.com.manager.model.message.webhook.Message;
-import co.com.manager.model.message.webhook.Metadata;
-import co.com.manager.model.message.webhook.Profile;
-import co.com.manager.model.message.webhook.Text;
-import co.com.manager.model.message.webhook.Value;
+import co.com.manager.model.message.webhook.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

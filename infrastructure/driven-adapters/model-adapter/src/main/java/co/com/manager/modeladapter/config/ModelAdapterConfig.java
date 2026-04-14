@@ -1,9 +1,13 @@
 package co.com.manager.modeladapter.config;
 
+import co.com.manager.model.business.Business;
+import co.com.manager.model.business.BusinessContext;
+import co.com.manager.model.message.user.MessageGateway;
+import co.com.manager.model.order.OrderRepository;
 import co.com.manager.model.stock.StockGateway;
 import co.com.manager.modeladapter.Assistant;
+import co.com.manager.modeladapter.tool.OrderTool;
 import co.com.manager.modeladapter.tool.StockTool;
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
@@ -36,10 +40,21 @@ public class ModelAdapterConfig {
     }
 
     @Bean
+    public OrderTool orderTool(OrderRepository orderRepository, MessageGateway messageGateway) {
+        return new OrderTool(orderRepository, messageGateway);
+    }
+
+    @Bean
+    public ChatMemoryRegistry chatMemoryRegistry(@Value("${adapters.gemini.memory-size}") int memorySize) {
+        return new ChatMemoryRegistry(memorySize);
+    }
+
+    @Bean
     public Assistant assistant(
             ChatModel chatModel,
             StockTool stockTool,
-            @Value("${adapters.gemini.memory-size}") int memorySize,
+            OrderTool orderTool,
+            ChatMemoryRegistry chatMemoryRegistry,
             @Value("classpath:prompts/system-prompt.txt") Resource systemPromptResource) throws IOException {
 
         String systemPrompt = new String(
@@ -47,10 +62,15 @@ public class ModelAdapterConfig {
 
         return AiServices.builder(Assistant.class)
                 .chatModel(chatModel)
-                .chatMemoryProvider(clientId ->
-                        MessageWindowChatMemory.withMaxMessages(memorySize))
-                .systemMessageProvider(clientId -> systemPrompt)
-                .tools(stockTool)
+                .chatMemoryProvider(chatMemoryRegistry::get)
+                .systemMessageProvider(clientId -> {
+                    Business business = BusinessContext.get();
+                    if (business != null && business.getDescription() != null) {
+                        return systemPrompt.replace("{business_description}", business.getDescription());
+                    }
+                    return systemPrompt;
+                })
+                .tools(stockTool, orderTool)
                 .build();
     }
 }

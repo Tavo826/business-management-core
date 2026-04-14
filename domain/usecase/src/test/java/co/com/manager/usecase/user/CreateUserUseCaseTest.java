@@ -1,8 +1,8 @@
 package co.com.manager.usecase.user;
 
 import co.com.manager.model.encoder.EncoderPort;
-import co.com.manager.model.token.AuthenticationPort;
 import co.com.manager.model.token.AuthResponse;
+import co.com.manager.model.token.AuthenticationPort;
 import co.com.manager.model.user.User;
 import co.com.manager.model.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

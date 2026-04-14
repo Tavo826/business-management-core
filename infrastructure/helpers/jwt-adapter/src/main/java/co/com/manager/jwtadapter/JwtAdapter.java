@@ -1,7 +1,7 @@
 package co.com.manager.jwtadapter;
 
-import co.com.manager.model.token.AuthenticationPort;
 import co.com.manager.model.token.AuthResponse;
+import co.com.manager.model.token.AuthenticationPort;
 import co.com.manager.model.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
