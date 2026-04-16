@@ -178,7 +178,7 @@ CREATE TABLE orders ( id VARCHAR(50) PRIMARY KEY, business_id VARCHAR(20), custo
 CREATE TABLE order_items ( id VARCHAR(50) PRIMARY KEY, order_id VARCHAR(50) NOT NULL, product_name VARCHAR(100), quantity INTEGER NOT NULL, unit_price NUMERIC(10,2), CONSTRAINT fk_order FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE );
 
 -- Índice para búsquedas por messageId
-CREATE INDEX idx_messages_message_id ON messages(message_id);
+CREATE INDEX idx_messages_message_id ON messages(message_id);~~
 
 TRUNCATE TABLE table_name
 TRUNCATE TABLE table_name CASCADE;

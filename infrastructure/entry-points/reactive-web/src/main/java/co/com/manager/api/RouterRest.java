@@ -29,7 +29,7 @@ public class RouterRest {
         return RouterFunctions.route()
                 .POST("/api/users/auth", userHandler::authenticate)
                 .GET("/api/users/{id}", userHandler::findUserById)
-                .POST("/api/users", userHandler::createUser)
+                .POST("/api/users/", userHandler::createUser)
                 .PUT("/api/users/{id}", userHandler::updateUser)
                 .DELETE("/api/users/{id}", userHandler::deleteUser)
                 .build();
@@ -49,7 +49,7 @@ public class RouterRest {
         return RouterFunctions.route()
                 .GET("/api/businesses/{id}", businessHandler::findBusinessById)
                 .GET("/api/businesses/users/{id}", businessHandler::findBusinessByUserId)
-                .POST("/api/businesses", businessHandler::createBusiness)
+                .POST("/api/businesses/", businessHandler::createBusiness)
                 .PUT("/api/businesses/{id}", businessHandler::updateBusiness)
                 .PUT("/api/businesses/users/{id}", businessHandler::updateBusiness)
                 .DELETE("/api/businesses/{id}", businessHandler::deleteBusiness)
