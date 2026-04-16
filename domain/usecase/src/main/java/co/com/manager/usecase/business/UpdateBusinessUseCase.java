@@ -24,6 +24,7 @@ public class UpdateBusinessUseCase {
                     actualBusiness.setPhone(verifyPhoneNumber(business.getPhone()));
                     actualBusiness.setEmail(business.getEmail());
                     actualBusiness.setAddress(business.getAddress());
+                    actualBusiness.setPhoneNumberId(business.getPhoneNumberId());
                     actualBusiness.setSocialMediaList(business.getSocialMediaList());
                     actualBusiness.setBankAccountList(business.getBankAccountList());
                     actualBusiness.setUpdatedAt(LocalDateTime.now());
