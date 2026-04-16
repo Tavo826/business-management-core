@@ -21,7 +21,7 @@ public class UpdateBusinessUseCase {
 
                     actualBusiness.setName(business.getName());
                     actualBusiness.setDescription(business.getDescription());
-                    actualBusiness.setPhone(business.getPhone());
+                    actualBusiness.setPhone(verifyPhoneNumber(business.getPhone()));
                     actualBusiness.setEmail(business.getEmail());
                     actualBusiness.setAddress(business.getAddress());
                     actualBusiness.setSocialMediaList(business.getSocialMediaList());
@@ -31,5 +31,14 @@ public class UpdateBusinessUseCase {
                     return actualBusiness;
                 })
                 .flatMap(repository::update);
+    }
+
+    private String verifyPhoneNumber(String phone) {
+
+        if (!phone.startsWith("57"))
+            return "57" + phone;
+
+        return phone;
+
     }
 }
