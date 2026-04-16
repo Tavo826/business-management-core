@@ -16,11 +16,21 @@ public class CreateBusinessUseCase {
     public Mono<Business> create(Business business) {
 
         return Mono.fromCallable(() -> {
+            business.setPhone(verifyPhoneNumber(business.getPhone()));
+            business.setPhoneNumberId("0");
             business.setCreatedAt(LocalDateTime.now());
             business.setUpdatedAt(LocalDateTime.now());
             return business;
         })
         .subscribeOn(Schedulers.boundedElastic())
         .flatMap(repository::create);
+    }
+
+    private String verifyPhoneNumber(String phone) {
+
+        if (!phone.startsWith("57"))
+            return "57" + phone;
+
+        return phone;
     }
 }
