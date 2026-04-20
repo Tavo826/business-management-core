@@ -81,7 +81,7 @@ public class OrderRepositoryAdapter extends ReactiveAdapterOperations<
     }
 
     @Override
-    public Mono<Order> updateStatus(Order order) {
+    public Mono<Order> updateOrder(Order order) {
 
         log.info("Updating order by id {} with status {}", order.getId(), order.getStatus());
 
@@ -111,6 +111,7 @@ public class OrderRepositoryAdapter extends ReactiveAdapterOperations<
     }
 
     private Mono<Order> toOrderWithItems(OrderData data) {
+
         return orderItemRepository.findByOrderId(data.getId())
                 .map(itemData -> OrderItem.builder()
                         .productName(itemData.getProductName())

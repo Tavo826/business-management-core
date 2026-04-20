@@ -40,7 +40,7 @@ public class RouterRest {
         return RouterFunctions.route()
                 .GET("/api/orders/{businessId}/business", orderHandler::findAllOrdersByBusiness)
                 .GET("/api/orders/{id}", orderHandler::findOrderById)
-                .PATCH("/api/orders/{id}/status", orderHandler::updateOrderStatus)
+                .PUT("/api/orders/{id}", orderHandler::updateOrder)
                 .build();
     }
 
