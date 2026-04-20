@@ -45,6 +45,9 @@ adapters:
   reststockconsumer:
     timeout: 5000
     url: "${URI_STOCK_SERVICE}"
+  restinventoryconsumer:
+    timeout: 10000
+    url: "${URI_INVENTORY_SERVICE}"
   gemini:
     api-key: "${GEMINI_API_KEY}"
     memory-size: "${GEMINI_MEMORY_SIZE}"
