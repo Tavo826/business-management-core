@@ -3,6 +3,8 @@ package co.com.manager.usecase.order;
 import co.com.manager.model.exceptions.OrderNotFoundException;
 import co.com.manager.model.order.Order;
 import co.com.manager.model.order.OrderRepository;
+import co.com.manager.model.order.Status;
+import co.com.manager.model.stock.StockGateway;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -12,17 +14,27 @@ import java.time.LocalDateTime;
 public class UpdateOrderUseCase {
 
     private final OrderRepository orderRepository;
+    private final StockGateway stockGateway;
 
-    public Mono<Order> updateStatus(String id, String status) {
+    public Mono<Order> update(String id, Order orderRequest) {
 
         return orderRepository.findById(id)
-                .switchIfEmpty(Mono.error(new OrderNotFoundException(id)))
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new OrderNotFoundException(id))))
                 .map(actualOder -> {
-                    actualOder.setStatus(status);
+                    actualOder.setCustomerName(orderRequest.getCustomerName());
+                    actualOder.setCustomerPhone(orderRequest.getCustomerPhone());
+                    actualOder.setCustomerAddress(orderRequest.getCustomerAddress());
+                    actualOder.setStatus(orderRequest.getStatus());
                     actualOder.setUpdatedAt(LocalDateTime.now());
 
                     return actualOder;
                 })
-                .flatMap(orderRepository::updateStatus);
+                .flatMap(orderRepository::updateOrder)
+                .flatMap(order -> {
+                    if (Status.CONFIRMED.name().equals(order.getStatus())) {
+                        return stockGateway.updateStock(order.getItems()).thenReturn(order);
+                    }
+                    return Mono.just(order);
+                });
     }
 }

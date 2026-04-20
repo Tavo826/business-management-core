@@ -1,5 +1,7 @@
 package co.com.manager.api.handler;
 
+import co.com.manager.api.dtos.order.OrderMapper;
+import co.com.manager.api.dtos.order.OrderRequest;
 import co.com.manager.usecase.order.FindOrderUseCase;
 import co.com.manager.usecase.order.UpdateOrderUseCase;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -40,12 +40,12 @@ public class OrderHandler {
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
-    public Mono<ServerResponse> updateOrderStatus(ServerRequest request) {
+    public Mono<ServerResponse> updateOrder(ServerRequest request) {
         String id = request.pathVariable("id");
 
-        return request.bodyToMono(Map.class)
-                .map(body -> (String) body.get("status"))
-                .flatMap(status -> updateOrderUseCase.updateStatus(id, status))
+        return request.bodyToMono(OrderRequest.class)
+                .map(orderRequest -> OrderMapper.toEntity(id, orderRequest))
+                .flatMap(order -> updateOrderUseCase.update(order.getId(), order))
                 .flatMap(order -> ServerResponse.ok().bodyValue(order))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }

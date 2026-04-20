@@ -119,7 +119,7 @@ public class OrderTool {
         log.info("Notifying business owner from: {} - notification: {}", business.getPhoneNumberId(), notification);
 
         messageGateway.sendMessage(business.getPhoneNumberId(), notification)
-                .doOnSuccess(r -> log.info("Notificación enviada al dueño del negocio: {}", business.getName()))
+                .doOnSuccess(r -> log.info("Notificación enviada al dueño del negocio: {} - {}", business.getName(), business.getPhone()))
                 .doOnError(e -> log.error("Error al notificar al dueño: {}", e.getMessage()))
                 .subscribe();
     }

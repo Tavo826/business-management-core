@@ -13,5 +13,5 @@ public interface OrderRepository {
 
     Flux<Order> findByStatus(String businessId, String status);
 
-    Mono<Order> updateStatus(Order order);
+    Mono<Order> updateOrder(Order order);
 }

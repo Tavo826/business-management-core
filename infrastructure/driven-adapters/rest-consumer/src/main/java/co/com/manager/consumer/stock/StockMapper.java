@@ -2,6 +2,9 @@ package co.com.manager.consumer.stock;
 
 import co.com.manager.consumer.stock.dto.ProductDto;
 import co.com.manager.consumer.stock.dto.StockDto;
+import co.com.manager.consumer.stock.dto.StockItems;
+import co.com.manager.consumer.stock.dto.UpdateStockDto;
+import co.com.manager.model.order.OrderItem;
 import co.com.manager.model.stock.Product;
 import co.com.manager.model.stock.Stock;
 import org.springframework.stereotype.Component;
@@ -12,7 +15,7 @@ import java.util.List;
 @Component
 public class StockMapper {
 
-    public Stock toDomain(StockDto dto) {
+    public static Stock toDomain(StockDto dto) {
 
         return Stock.builder()
                 .query(dto.getQuery())
@@ -21,7 +24,7 @@ public class StockMapper {
                 .build();
     }
 
-    private List<Product> toDomain(List<ProductDto> dtoList) {
+    private static List<Product> toDomain(List<ProductDto> dtoList) {
 
         List<Product> products = new ArrayList<>();
         for (ProductDto dto : dtoList) {
@@ -31,7 +34,7 @@ public class StockMapper {
         return products;
     }
 
-    private Product toDomain(ProductDto dto) {
+    private static Product toDomain(ProductDto dto) {
 
         return Product.builder()
                 .id(dto.getId())
@@ -41,6 +44,21 @@ public class StockMapper {
                 .category(dto.getCategory())
                 .description(dto.getDescription())
                 .relevanceScore(dto.getRelevanceScore())
+                .build();
+    }
+
+    public static UpdateStockDto toRequestUpdate(List<OrderItem> orderItems) {
+
+        List<StockItems> stockItems = new ArrayList<>();
+        for (OrderItem item : orderItems) {
+            stockItems.add(StockItems.builder()
+                            .name(item.getProductName())
+                            .purchasedQuantity(item.getQuantity())
+                    .build());
+        }
+
+        return UpdateStockDto.builder()
+                .items(stockItems)
                 .build();
     }
 }
