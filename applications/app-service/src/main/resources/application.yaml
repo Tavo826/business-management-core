@@ -20,7 +20,7 @@ management:
     circuitbreakers:
       enabled: true
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080,https://tavo826.github.io/"
+  allowed-origins: "http://localhost:4200,http://localhost:8080,https://tavo826.github.io/,https://customermanagement.top"
 security:
   jwt:
     secret: "${JWT_SECRET}"
