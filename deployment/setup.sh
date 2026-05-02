@@ -181,7 +181,7 @@ if [[ ! -f "${SSL_CERT_PATH}" ]]; then
     --email "${CERTBOT_EMAIL}" --agree-tos --no-eff-email --non-interactive
 
   log "Re-running setup to apply SSL config..."
-  exec "$0" "$@"
+  exec bash "$0" "$@"
 fi
 
 log "Setup complete."
