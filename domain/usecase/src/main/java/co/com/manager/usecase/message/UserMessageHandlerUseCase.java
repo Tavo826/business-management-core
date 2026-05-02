@@ -62,7 +62,7 @@ public class UserMessageHandlerUseCase {
         return findBusinessCached(phoneNumberId)
                 .flatMap(business -> {
                     String clientId = business.getNit() + ":" + phoneNumber;
-                    return modelPort.chat(messageBody, clientId, business);
+                    return modelPort.chat(messageBody, clientId, business, phoneNumber);
                 })
                 .switchIfEmpty(Mono.just(FALLBACK_MESSAGE))
                 .flatMap(modelResponse -> sendMessageResponse(phoneNumberId, phoneNumber, modelResponse))

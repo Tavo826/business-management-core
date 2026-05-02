@@ -38,11 +38,7 @@ exit
 
 aws s3 cp applications/app-service/build/libs/BusinessManagerCore.jar s3://business-manager-core-jar-container/
 
---------------------------------------------------------------------------
-sudo dnf install -y java-21-amazon-corretto-devel
-
-java -version
----------------------------------------------------------------------------
+------------------------------------------------------
 
 cd /home/$USER
 git clone https://github.com/Tavo826/business-management-core
@@ -50,8 +46,6 @@ git clone https://github.com/Tavo826/business-management-core
 cd business-management-core
 
 chmod +x gradlew
-------------------------------------------------------------
-./gradlew build -x test
 ------------------------------------------------------------
 
 aws s3 cp s3://business-manager-core-jar-container/BusinessManagerCore.jar /home/ec2-user/business-management-core/applications/app-service/build/libs/
@@ -96,9 +90,7 @@ sudo docker logs nginx --tail=100
 sudo chmod -R 777 certbot/www
 sudo chmod -R 777 certbot/conf
 
-------------------------------------------------------
-sudo docker compose run --rm certbot certonly --webroot -w /var/www/certbot -d customermanagement.top -d www.customermanagement.top --email 9gagigor816@gmail.com --agree-tos --no-eff-email
-------------------------------------------------------
+-----------------------------------------------------------
 
 sudo docker run --rm -it -v "$(pwd)/certbot/conf:/etc/letsencrypt" -v "$(pwd)/certbot/www:/var/www/certbot" certbot/certbot certonly --webroot -w /var/www/certbot -d customermanagement.top -d www.customermanagement.top --email 9gagigor816@gmail.com --agree-tos --no-eff-email
 

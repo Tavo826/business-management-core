@@ -2,13 +2,15 @@ package co.com.manager.modeladapter.tool;
 
 import co.com.manager.model.business.Business;
 import co.com.manager.model.business.BusinessContext;
+import co.com.manager.model.business.CustomerContext;
 import co.com.manager.model.message.user.MessageGateway;
 import co.com.manager.model.message.user.Text;
 import co.com.manager.model.message.user.UserMessageRequest;
 import co.com.manager.model.order.Order;
-import co.com.manager.model.order.OrderRepository;
 import co.com.manager.model.order.OrderItem;
+import co.com.manager.model.order.OrderRepository;
 import co.com.manager.model.order.Status;
+import co.com.manager.model.stock.StockGateway;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +27,13 @@ public class OrderTool {
 
     private final OrderRepository orderRepository;
     private final MessageGateway messageGateway;
+    private final StockGateway stockGateway;
 
-    @Tool("Crea una orden de compra cuando el cliente confirma su pedido. Usa esta herramienta SOLO cuando el cliente haya confirmado los productos, cantidades, su nombre y dirección.")
+    @Tool("Crea una orden de compra cuando el cliente confirma su pedido. Usa esta herramienta SOLO cuando el cliente haya confirmado los productos, cantidades, su nombre y dirección. El teléfono del cliente NO se pasa como parámetro: el sistema lo toma del remitente real de WhatsApp.")
     public String createOrder(
-            @P("Nombre completo del cliente") String customerName,
-            @P("Teléfono del cliente") String customerPhone,
-            @P("Dirección de entrega del cliente") String customerAddress,
-            @P("Lista de productos separados por punto y coma. Cada producto tiene el formato: nombre,cantidad,precio. Ejemplo: 'DONKAT GATITOS X 1 kg,2,12380;DOG SHOW ADULTO RAZA PEQUEÑA X 1 kg,1,14761'") String products) {
+            @P("Nombre completo del cliente, tal como lo proporcionó en la conversación") String customerName,
+            @P("Dirección de entrega del cliente, tal como la proporcionó en la conversación") String customerAddress,
+            @P("Lista de productos separados por punto y coma. Cada producto tiene el formato: nombre,cantidad,precio. El nombre y el precio DEBEN coincidir exactamente con un resultado previo de la herramienta de inventario. Ejemplo: 'DONKAT GATITOS X 1 kg,2,12380;DOG SHOW ADULTO RAZA PEQUEÑA X 1 kg,1,14761'") String products) {
 
         log.info("OrderTool invocado - creando orden para cliente: {}", customerName);
 
@@ -41,9 +43,15 @@ public class OrderTool {
             return "Error: No se pudo identificar el negocio. Intenta de nuevo.";
         }
 
+        String customerPhone = CustomerContext.get();
+        if (customerPhone == null || customerPhone.isBlank()) {
+            log.error("No se encontró el teléfono del cliente en el contexto de la conversación");
+            return "Error: No se pudo identificar el remitente. Intenta de nuevo.";
+        }
+
         List<OrderItem> items = parseProducts(products);
 
-        log.info("Items a comprar: {}", items);
+        log.info("Items a comprar (sin validar): {}", items);
 
         if (items.isEmpty()) {
             return "Error: No se pudieron interpretar los productos. Verifica el formato.";
