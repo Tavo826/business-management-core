@@ -1,6 +1,5 @@
 package co.com.manager.api.dtos.order;
 
-import co.com.manager.model.order.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

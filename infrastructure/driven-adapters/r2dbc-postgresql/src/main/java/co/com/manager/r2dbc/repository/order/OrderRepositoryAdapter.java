@@ -1,13 +1,11 @@
 package co.com.manager.r2dbc.repository.order;
 
 import co.com.manager.model.order.Order;
-import co.com.manager.model.order.OrderRepository;
 import co.com.manager.model.order.OrderItem;
-import co.com.manager.model.user.User;
+import co.com.manager.model.order.OrderRepository;
 import co.com.manager.r2dbc.data.order.OrderData;
 import co.com.manager.r2dbc.data.order.OrderItemData;
 import co.com.manager.r2dbc.helper.ReactiveAdapterOperations;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
@@ -39,7 +37,7 @@ public class OrderRepositoryAdapter extends ReactiveAdapterOperations<
 
         log.info("Saving order");
 
-        String orderId = UUID.randomUUID().toString();
+        String orderId = UUID.randomUUID().toString().substring(0, 8);
         order.setId(orderId);
 
         OrderData orderData = toData(order);

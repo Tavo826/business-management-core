@@ -2,6 +2,7 @@ package co.com.manager.modeladapter;
 
 import co.com.manager.model.business.Business;
 import co.com.manager.model.business.BusinessContext;
+import co.com.manager.model.business.CustomerContext;
 import co.com.manager.model.message.webhook.ModelPort;
 import co.com.manager.modeladapter.config.ChatMemoryRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +23,14 @@ public class GeminiModelAdapter implements ModelPort {
     }
 
     @Override
-    public Mono<String> chat(String userMessage, String clientId, Business business) {
+    public Mono<String> chat(String userMessage, String clientId, Business business, String phoneNumber) {
         return Mono.fromCallable(() -> {
             BusinessContext.set(business);
+            CustomerContext.set(phoneNumber);
             try {
                 return assistant.chat(clientId, userMessage);
             } finally {
+                CustomerContext.clear();
                 BusinessContext.clear();
             }
         })

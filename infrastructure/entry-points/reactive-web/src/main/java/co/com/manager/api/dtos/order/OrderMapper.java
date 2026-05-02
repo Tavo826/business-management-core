@@ -1,11 +1,7 @@
 package co.com.manager.api.dtos.order;
 
 import co.com.manager.model.order.Order;
-import co.com.manager.model.order.OrderItem;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class OrderMapper {
