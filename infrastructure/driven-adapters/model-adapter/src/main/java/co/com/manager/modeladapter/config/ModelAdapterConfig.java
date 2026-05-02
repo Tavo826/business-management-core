@@ -40,8 +40,8 @@ public class ModelAdapterConfig {
     }
 
     @Bean
-    public OrderTool orderTool(OrderRepository orderRepository, MessageGateway messageGateway) {
-        return new OrderTool(orderRepository, messageGateway);
+    public OrderTool orderTool(OrderRepository orderRepository, MessageGateway messageGateway, StockGateway stockGateway) {
+        return new OrderTool(orderRepository, messageGateway, stockGateway);
     }
 
     @Bean
@@ -66,9 +66,12 @@ public class ModelAdapterConfig {
                 .systemMessageProvider(clientId -> {
                     Business business = BusinessContext.get();
                     if (business != null && business.getDescription() != null) {
-                        return systemPrompt.replace("{business_description}", business.getDescription());
+                        String safeDescription = business.getName() + " - " + business.getDescription()
+                                .replace("</datos_negocio>", "")
+                                .replace("<datos_negocio>", "");
+                        return systemPrompt.replace("{business_description}", safeDescription);
                     }
-                    return systemPrompt;
+                    return systemPrompt.replace("{business_description}", "(sin descripción)");
                 })
                 .tools(stockTool, orderTool)
                 .build();
