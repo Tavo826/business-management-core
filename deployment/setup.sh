@@ -154,6 +154,7 @@ fi
 # 7. Bring the stack up
 log "Starting stack (docker compose up -d --build)..."
 sudo docker compose up -d --build
+sudo docker compose restart nginx
 
 # 8. Wait for postgres and run idempotent DDL
 log "Waiting for postgres-db healthcheck..."
