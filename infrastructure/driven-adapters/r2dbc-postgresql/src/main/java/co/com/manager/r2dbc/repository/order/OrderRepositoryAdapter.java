@@ -64,8 +64,8 @@ public class OrderRepositoryAdapter extends ReactiveAdapterOperations<
 
         log.info("Finding orders by business id {}", businessId);
 
-        return repository.findAllByBusinessId(businessId)
-                .flatMap(this::toOrderWithItems);
+        return repository.findByBusinessIdOrderByCreatedAtDesc(businessId)
+                .concatMap(this::toOrderWithItems);
     }
 
 
@@ -75,7 +75,7 @@ public class OrderRepositoryAdapter extends ReactiveAdapterOperations<
         log.info("Finding orders by status {}", status);
 
         return repository.findAllByBusinessIdAndStatus(businessId, status)
-                .flatMap(this::toOrderWithItems);
+                .concatMap(this::toOrderWithItems);
     }
 
     @Override
