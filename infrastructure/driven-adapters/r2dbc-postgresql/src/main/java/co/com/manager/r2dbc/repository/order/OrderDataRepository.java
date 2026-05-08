@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux;
 
 public interface OrderDataRepository extends ReactiveCrudRepository<OrderData, String>, ReactiveQueryByExampleExecutor<OrderData> {
 
-    Flux<OrderData> findAllByBusinessId(String businessId);
+    Flux<OrderData> findByBusinessIdOrderByCreatedAtDesc(String businessId);
 
     Flux<OrderData> findAllByBusinessIdAndStatus(String businessId, String status);
 }

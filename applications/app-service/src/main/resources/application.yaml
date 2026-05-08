@@ -20,12 +20,17 @@ management:
     circuitbreakers:
       enabled: true
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080,https://tavo826.github.io/,https://businessmanagement.store"
+  allowed-origins: "http://localhost:4200,http://localhost:8080,https://tavo826.github.io/,https://businessmanagement.store,https://businesssalesbot.com"
 security:
   jwt:
     secret: "${JWT_SECRET}"
     expiration: "${JWT_EXPIRATION}"
   webhook-token: "${WEBHOOK_TOKEN}"
+privacy:
+  policy:
+    url: "${PRIVACY_POLICY_URL:https://businesssalesbot.com/privacy-policy}"
+    version: "${PRIVACY_POLICY_VERSION:v1}"
+    message: "${PRIVACY_POLICY_MESSAGE:Hola. Antes de continuar, te informamos que al seguir esta conversación aceptas nuestra política de privacidad y el tratamiento de tus datos personales. Puedes consultarla aquí: {url}. ¿En qué puedo ayudarte hoy?}"
 adapters:
   r2dbc:
     host: "${CORE_DB_HOST}"
