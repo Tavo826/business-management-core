@@ -6,6 +6,7 @@ import co.com.manager.model.message.user.MessageGateway;
 import co.com.manager.model.order.OrderRepository;
 import co.com.manager.model.stock.StockGateway;
 import co.com.manager.modeladapter.Assistant;
+import co.com.manager.modeladapter.tool.HandoffTool;
 import co.com.manager.modeladapter.tool.OrderTool;
 import co.com.manager.modeladapter.tool.StockTool;
 import dev.langchain4j.model.chat.ChatModel;
@@ -45,6 +46,11 @@ public class ModelAdapterConfig {
     }
 
     @Bean
+    public HandoffTool handoffTool(MessageGateway messageGateway) {
+        return new HandoffTool(messageGateway);
+    }
+
+    @Bean
     public ChatMemoryRegistry chatMemoryRegistry(@Value("${adapters.gemini.memory-size}") int memorySize) {
         return new ChatMemoryRegistry(memorySize);
     }
@@ -54,6 +60,7 @@ public class ModelAdapterConfig {
             ChatModel chatModel,
             StockTool stockTool,
             OrderTool orderTool,
+            HandoffTool handoffTool,
             ChatMemoryRegistry chatMemoryRegistry,
             @Value("classpath:prompts/system-prompt.txt") Resource systemPromptResource) throws IOException {
 
@@ -73,7 +80,7 @@ public class ModelAdapterConfig {
                     }
                     return systemPrompt.replace("{business_description}", "(sin descripción)");
                 })
-                .tools(stockTool, orderTool)
+                .tools(stockTool, orderTool, handoffTool)
                 .build();
     }
 }
